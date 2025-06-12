@@ -15,13 +15,15 @@ interface CartItemProps {
 export default function CartItem({ item }: CartItemProps) {
   return (
     <div className="flex items-center space-x-4 border-b pb-4">
-      <Image 
-        src={item.image || "/placeholder.svg"} 
-        alt={item.name} 
-        width={100} 
-        height={100} 
-        className="rounded-md" 
-      />
+      <div className="relative w-24 h-24">
+        <Image 
+          src={item.image || "/placeholder.svg"} 
+          alt={item.name} 
+          fill
+          style={{ objectFit: "cover" }}
+          className="rounded-md" 
+        />
+      </div>
       <div className="flex-grow">
         <h3 className="font-semibold">{item.name}</h3>
         <p className="text-gray-600">
