@@ -15,12 +15,13 @@ export default function Cart() {
   }
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.days, 0)
-  const tax = subtotal * 0.18 // Assuming 18% GST
+  const tax = subtotal * 0.18 // 18% GST
   const total = subtotal + tax
 
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Your Cart</h1>
+
       {cartItems.length > 0 ? (
         <div className="grid md:grid-cols-3 gap-8">
           <div className="md:col-span-2 space-y-4">
@@ -28,10 +29,10 @@ export default function Cart() {
               <div key={item.id} className="flex items-center space-x-4 border-b pb-4">
                 <div className="relative w-24 h-24">
                   <Image
-                    src={item.image || "/placeholder.svg"}
+                    src={item.image ?? "/placeholder.svg"} // ✅ fixed optional chaining
                     alt={item.name}
-                    layout="fill"
-                    objectFit="cover"
+                    fill // ✅ replaces layout="fill"
+                    style={{ objectFit: "cover" }} // ✅ replaces objectFit="cover"
                     className="rounded-md"
                   />
                 </div>
@@ -46,21 +47,27 @@ export default function Cart() {
                       type="number"
                       id={`days-${item.id}`}
                       value={item.days}
-                      onChange={(e) => handleUpdateDays(item.id, Number.parseInt(e.target.value))}
+                      onChange={(e) => handleUpdateDays(item.id, Number(e.target.value))}
                       className="w-20"
-                      min="1"
+                      min={1}
                     />
                   </div>
                 </div>
                 <div className="text-right">
                   <p className="font-semibold">₹{item.price * item.days}</p>
-                  <Button variant="ghost" size="icon" onClick={() => removeFromCart(item.id)} className="mt-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeFromCart(item.id)}
+                    className="mt-2"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
             ))}
           </div>
+
           <div className="bg-gray-100 p-6 rounded-lg">
             <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
             <div className="space-y-2 mb-4">
@@ -93,4 +100,3 @@ export default function Cart() {
     </div>
   )
 }
-
