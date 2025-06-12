@@ -1,6 +1,9 @@
+"use client"
+
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Trash2 } from "lucide-react"
+import { useCart } from "@/context/CartContext"
 
 interface CartItemProps {
   item: {
@@ -13,14 +16,16 @@ interface CartItemProps {
 }
 
 export default function CartItem({ item }: CartItemProps) {
+  const { removeFromCart } = useCart()
+
   return (
     <div className="flex items-center space-x-4 border-b pb-4">
       <div className="relative w-24 h-24">
         <Image 
-          src={item.image ?? "/placeholder.svg"} // ✅ Use optional chaining fallback
+          src={item.image ?? "/placeholder.svg"} 
           alt={item.name}
-          fill // ✅ Correct usage for absolute positioning
-          className="rounded-md object-cover" // ✅ Move objectFit to Tailwind
+          fill
+          className="rounded-md object-cover"
         />
       </div>
       <div className="flex-grow">
@@ -30,7 +35,12 @@ export default function CartItem({ item }: CartItemProps) {
         </p>
         <p className="font-semibold">Total: ₹{item.price * item.days}</p>
       </div>
-      <Button variant="destructive" size="icon">
+      <Button 
+        variant="destructive" 
+        size="icon" 
+        onClick={() => removeFromCart(item.id)}
+        aria-label="Remove item"
+      >
         <Trash2 className="h-4 w-4" />
       </Button>
     </div>
